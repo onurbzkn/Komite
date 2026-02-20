@@ -3,13 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Focus App v10.2</title>
+    <title>Focus App v10.3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --bg: #09090b; --accent: #3b82f6; }
-        body { background-color: var(--bg); color: white; font-family: -apple-system, system-ui, sans-serif; overflow: hidden; }
         
+        /* Kaydırma Sorununu Çözen Ayarlar */
+        html, body { 
+            background-color: var(--bg); 
+            color: white; 
+            font-family: -apple-system, system-ui, sans-serif; 
+            height: 100%;
+            overflow: hidden; /* Dış çerçeve sabit */
+        }
+        
+        .content-section { 
+            display: none; 
+            height: 100vh; 
+            overflow-y: scroll; /* İçerik kendi içinde kayar */
+            -webkit-overflow-scrolling: touch;
+            padding: 24px 24px 180px 24px; /* Alt bar için devasa boşluk */
+        }
+
+        .active-section { display: block; animation: sectionFade 0.4s ease-out; }
+
         /* iOS 26 Liquid Glass Navigation Bar */
         .liquid-nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
@@ -22,45 +40,41 @@
             z-index: 1000; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        /* Dinamik Buton Efektleri */
-        .btn-ios {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative; overflow: hidden;
-        }
+        .btn-ios { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .btn-ios:active { transform: scale(0.92); filter: brightness(1.2); }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 32px; backdrop-filter: blur(10px);
+            margin-bottom: 20px;
         }
 
-        .content-section { display: none; height: 100vh; overflow-y: auto; padding-bottom: 150px; }
-        .active-section { display: block; animation: sectionFade 0.4s ease-out; }
         @keyframes sectionFade { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-
         .nav-item { transition: all 0.3s ease; color: #888; }
         .nav-item.active { color: white; transform: translateY(-5px); }
     </style>
 </head>
-<body class="p-6">
+<body>
 
-    <header class="flex justify-between items-center mb-10 pt-4">
-        <div>
-            <h1 class="text-3xl font-black tracking-tighter" id="pageTitle">ODAK</h1>
-            <p class="text-[10px] text-blue-500 font-bold uppercase tracking-[0.2em]">Medikal Asistan</p>
+    <div class="px-6 pt-6 bg-[#09090b]/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h1 class="text-3xl font-black tracking-tighter" id="pageTitle">ODAK</h1>
+                <p class="text-[10px] text-blue-500 font-bold uppercase tracking-[0.2em]">Medikal Asistan</p>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center btn-ios">
+                <i class="fas fa-user-md"></i>
+            </div>
         </div>
-        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center btn-ios shadow-lg">
-            <i class="fas fa-user-md"></i>
-        </div>
-    </header>
+    </div>
 
-    <section id="odak" class="content-section active-section">
-        <div class="glass-card p-8 text-center mb-6">
+    <section id="odak" class="content-section active-section pt-24">
+        <div class="glass-card p-8 text-center">
             <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Pomodoro</span>
             <div id="timer" class="text-7xl font-black my-6 tracking-tighter">25:00</div>
             <div class="flex flex-col gap-3">
-                <button onclick="startTimer()" id="startBtn" class="btn-ios bg-blue-600 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-blue-900/20">BAŞLAT</button>
+                <button onclick="startTimer()" id="startBtn" class="btn-ios bg-blue-600 py-4 rounded-2xl font-bold text-lg">BAŞLAT</button>
                 <button onclick="resetTimer()" class="btn-ios text-gray-500 font-bold text-xs uppercase tracking-widest">Sıfırla</button>
             </div>
         </div>
@@ -75,17 +89,17 @@
         </div>
     </section>
 
-    <section id="komite" class="content-section">
+    <section id="komite" class="content-section pt-24">
         <div class="glass-card p-8">
             <h3 class="text-sm font-bold text-gray-400 mb-6 text-center">Zamanlayıcı için Komite tarihini giriniz.</h3>
-            <input type="date" id="examDate" class="w-full bg-zinc-900 p-5 rounded-2xl border border-zinc-800 text-white mb-8 outline-none focus:border-blue-500 transition-all">
+            <input type="date" id="examDate" class="w-full bg-zinc-900 p-5 rounded-2xl border border-zinc-800 text-white mb-8 outline-none">
             <div id="countdown" class="text-5xl font-black text-center text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500 py-6">Tarih Seçin</div>
         </div>
     </section>
 
-    <section id="ezber" class="content-section">
-        <div class="glass-card p-8 mb-6 text-center min-h-[200px] flex items-center justify-center btn-ios bg-gradient-to-br from-blue-900/20 to-transparent" onclick="flipCard()">
-            <p id="cardDisplay" class="text-xl font-medium px-4">Dokun ve Öğren</p>
+    <section id="ezber" class="content-section pt-24">
+        <div class="glass-card p-8 min-h-[220px] flex items-center justify-center btn-ios bg-gradient-to-br from-blue-900/20 to-transparent" onclick="flipCard()">
+            <p id="cardDisplay" class="text-xl font-medium px-4 text-center">Dokun ve Öğren</p>
         </div>
         <div class="glass-card p-6 space-y-4">
             <input id="qInput" placeholder="Soru..." class="w-full bg-zinc-900 p-4 rounded-xl outline-none">
@@ -94,8 +108,8 @@
         </div>
     </section>
 
-    <section id="ayarlar" class="content-section">
-        <div class="glass-card p-6 mb-4">
+    <section id="ayarlar" class="content-section pt-24">
+        <div class="glass-card p-6">
             <h2 class="font-bold mb-6">Uygulama Teması</h2>
             <div class="grid grid-cols-2 gap-4">
                 <button class="btn-ios p-4 rounded-2xl bg-blue-600/20 border border-blue-500/50 text-xs font-bold">Gece Mavisi</button>
@@ -110,7 +124,7 @@
             <button onclick="clearAllData()" class="btn-ios w-full mt-10 bg-red-900/20 border border-red-500/30 text-red-500 py-4 rounded-2xl font-bold text-sm">
                 VERİLERİMİ SIFIRLA
             </button>
-            <p class="text-center text-[10px] text-gray-600 mt-6">Version 10.2 - Ustam Edition</p>
+            <p class="text-center text-[10px] text-gray-600 mt-6">Version 10.3 - Ustam Edition</p>
         </div>
     </section>
 
@@ -130,16 +144,16 @@
     </nav>
 
     <script>
-        // Navigation Logic
         function nav(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById('btn-' + id).classList.add('active');
             document.getElementById('pageTitle').innerText = id.toUpperCase();
+            document.getElementById(id).scrollTop = 0; // Sayfa değişince en üste atar
         }
 
-        // Pomodoro Logic
+        // Pomodoro
         let timeLeft = 25 * 60, timerId = null;
         function updateTimer() {
             let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
@@ -149,29 +163,29 @@
             const btn = document.getElementById('startBtn');
             if (!timerId) {
                 timerId = setInterval(() => { timeLeft--; updateTimer(); if(timeLeft<=0) clearInterval(timerId); }, 1000);
-                btn.innerText = "DURAKLAT"; btn.classList.replace('bg-blue-600', 'bg-zinc-700');
+                btn.innerText = "DURAKLAT"; btn.style.backgroundColor = "#3f3f46";
             } else {
                 clearInterval(timerId); timerId = null;
-                btn.innerText = "DEVAM ET"; btn.classList.replace('bg-zinc-700', 'bg-blue-600');
+                btn.innerText = "DEVAM ET"; btn.style.backgroundColor = "#2563eb";
             }
         }
-        function resetTimer() { clearInterval(timerId); timerId = null; timeLeft = 25 * 60; updateTimer(); document.getElementById('startBtn').innerText = "BAŞLAT"; }
+        function resetTimer() { clearInterval(timerId); timerId = null; timeLeft = 25 * 60; updateTimer(); document.getElementById('startBtn').innerText = "BAŞLAT"; document.getElementById('startBtn').style.backgroundColor = "#2563eb"; }
 
-        // Kronometre Logic
+        // Kronometre
         let swTime = 0, swId = null;
         function toggleStopwatch() {
             const btn = document.getElementById('swBtn');
             if(!swId) {
                 swId = setInterval(() => { swTime += 10; let d = new Date(swTime); document.getElementById('stopwatch').innerText = d.toISOString().substr(14, 8); }, 10);
-                btn.innerText = "DURDUR"; btn.classList.replace('bg-emerald-600', 'bg-zinc-700');
+                btn.innerText = "DURDUR";
             } else {
                 clearInterval(swId); swId = null;
-                btn.innerText = "DEVAM ET"; btn.classList.replace('bg-zinc-700', 'bg-emerald-600');
+                btn.innerText = "BAŞLAT";
             }
         }
         function resetStopwatch() { clearInterval(swId); swId = null; swTime = 0; document.getElementById('stopwatch').innerText = "00:00.00"; document.getElementById('swBtn').innerText = "BAŞLAT"; }
 
-        // Flashcards
+        // Ezber
         let currentCard = JSON.parse(localStorage.getItem('card')) || {q: "Dokun ve Öğren", a: "Cevap burada!"};
         let isFront = true;
         function flipCard() {
@@ -180,10 +194,10 @@
         }
         function addCard() {
             const q = document.getElementById('qInput').value, a = document.getElementById('aInput').value;
-            if(q && a) { currentCard = {q, a}; localStorage.setItem('card', JSON.stringify(currentCard)); flipCard(); }
+            if(q && a) { currentCard = {q, a}; localStorage.setItem('card', JSON.stringify(currentCard)); isFront = true; flipCard(); }
         }
 
-        // Komite Countdown
+        // Komite
         const examInput = document.getElementById('examDate');
         if(localStorage.getItem('target')) { examInput.value = localStorage.getItem('target'); setInterval(updateCount, 1000); }
         examInput.addEventListener('change', () => { localStorage.setItem('target', examInput.value); setInterval(updateCount, 1000); });
@@ -193,7 +207,7 @@
             document.getElementById('countdown').innerText = Math.floor(d/86400000) + " GÜN";
         }
 
-        function clearAllData() { if(confirm("Tüm veriler sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
+        function clearAllData() { if(confirm("Tüm veriler sıfırlansın mı Hocam?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
 </html>
