@@ -6,6 +6,8 @@
     <title>Focus App v18.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Focus%20App%22,%22short_name%22:%22Focus%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%2309090b%22,%22theme_color%22:%22%233b82f6%22,%22icons%22:[{%22src%22:%22https://cdn-icons-png.flaticon.com/512/3063/3063176.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}">
+
     <style>
         :root { --bg: #09090b; --card: rgba(255, 255, 255, 0.04); --accent: #3b82f6; }
         .theme-blue { --bg: #0f172a; --accent: #3b82f6; }
