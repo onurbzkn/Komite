@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Focus App v13.2</title>
+    <title>Focus App v14</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -40,7 +40,7 @@
         .page-content.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card-item { background: rgba(255,255,255,0.02); border-radius: 15px; padding: 15px; margin-top: 10px; border-left: 4px solid var(--accent); }
+        .list-item { background: rgba(255,255,255,0.02); border-radius: 20px; padding: 18px; margin-top: 10px; border-left: 4px solid var(--accent); }
     </style>
 </head>
 <body class="theme-blue">
@@ -68,7 +68,6 @@
             <button onclick="startTimer()" id="startBtn" class="btn-ios w-full bg-blue-600 py-4 rounded-2xl font-bold text-lg mb-2">BAŞLAT</button>
             <button onclick="resetTimer()" class="text-[10px] text-gray-500 font-bold uppercase">Sıfırla</button>
         </div>
-
         <div class="glass-card text-center">
             <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Kronometre</p>
             <div id="stopwatch" class="text-4xl font-mono font-bold mb-4">00:00.00</div>
@@ -81,28 +80,28 @@
 
     <div id="page-komite" class="page-content max-w-md mx-auto">
         <div class="glass-card">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4 text-center">Hedef Komite Tarihi</p>
-            <input type="date" id="examDate" class="w-full bg-black/20 p-5 rounded-2xl border border-white/10 text-white mb-6 outline-none">
-            <div id="countdown" class="text-4xl font-black text-center py-6 leading-tight">TARİH SEÇİN</div>
+            <p class="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-4 text-center">YILLIK KOMİTE PLANI</p>
+            <div class="space-y-3">
+                <input id="examName" placeholder="Komite Adı (Örn: Anatomi)" class="w-full bg-black/20 p-4 rounded-xl outline-none border border-white/10 text-sm">
+                <input type="date" id="examDate" class="w-full bg-black/20 p-4 rounded-xl border border-white/10 text-white outline-none text-sm">
+                <button onclick="addExam()" class="btn-ios w-full bg-blue-600 py-4 rounded-xl font-bold uppercase text-xs">PLANA EKLE</button>
+            </div>
         </div>
 
+        <div id="examList" class="space-y-3 mb-8">
+            </div>
+
         <div class="glass-card">
-            <p class="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em] mb-3">Günün Sözü</p>
-            <p id="quoteBox" class="text-lg font-medium italic opacity-80 leading-relaxed">"Bugün çalış, yarın Onur Hocam desinler."</p>
+            <p class="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em] mb-3 text-center">MOTİVASYON</p>
+            <p id="quoteBox" class="text-md font-medium italic opacity-80 text-center leading-relaxed">"Bugün çalış, yarın Onur Hocam desinler."</p>
         </div>
     </div>
 
     <div id="page-ezber" class="page-content max-w-md mx-auto">
         <div class="glass-card min-h-[180px] flex items-center justify-center btn-ios bg-gradient-to-br from-white/5 to-transparent mb-6" onclick="flipCard()">
-            <p id="cardDisplay" class="text-xl font-semibold px-6 text-center">Önce Kart Ekleyin</p>
+            <p id="cardDisplay" class="text-xl font-semibold px-6 text-center">Ezber Kartı Seçilmedi</p>
         </div>
         <div class="glass-card space-y-3">
-            <select id="catInput" class="w-full bg-black/20 p-3 rounded-xl border border-white/10 text-white outline-none text-sm">
-                <option value="Genel">Genel</option>
-                <option value="Anatomi">Anatomi</option>
-                <option value="Fizyoloji">Fizyoloji</option>
-                <option value="Biyokimya">Biyokimya</option>
-            </select>
             <input id="qInput" placeholder="Soru..." class="w-full bg-black/20 p-3 rounded-xl outline-none border border-white/10 text-sm">
             <input id="aInput" placeholder="Cevap..." class="w-full bg-black/20 p-3 rounded-xl outline-none border border-white/10 text-sm">
             <button onclick="addCard()" class="btn-ios w-full bg-blue-600 py-3 rounded-xl font-bold uppercase text-xs">KARTI KAYDET</button>
@@ -115,35 +114,27 @@
             <p class="font-bold mb-4 text-center uppercase tracking-widest text-[10px] text-gray-400">Uygulama Teması</p>
             <div class="grid grid-cols-2 gap-3">
                 <div onclick="setTheme('theme-blue')" class="theme-swatch bg-[#0f172a] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold">GECE MAVİSİ</div>
-                <div onclick="setTheme('theme-dark')" class="theme-swatch bg-[#000000] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold border border-white/10">SAF SİYAH</div>
+                <div onclick="setTheme('theme-dark')" class="theme-swatch bg-[#000000] border border-white/10 h-12 flex items-center justify-center rounded-xl text-[9px] font-bold">SAF SİYAH</div>
                 <div onclick="setTheme('theme-green')" class="theme-swatch bg-[#064e3b] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold">TIP YEŞİLİ</div>
                 <div onclick="setTheme('theme-purple')" class="theme-swatch bg-[#2e1065] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold">VİBE MOR</div>
             </div>
         </div>
         <div class="glass-card">
-            <button onclick="clearData()" class="btn-ios w-full py-4 bg-red-900/10 border border-red-500/30 text-red-500 rounded-2xl font-bold uppercase text-xs tracking-widest">VERİLERİMİ SIFIRLA</button>
-            <p class="text-center text-[9px] text-gray-500 mt-6 font-bold uppercase tracking-widest">V13.2 - FINAL READY</p>
+            <button onclick="clearData()" class="btn-ios w-full py-4 bg-red-900/10 border border-red-500/30 text-red-500 rounded-2xl font-bold uppercase text-xs">VERİLERİMİ SIFIRLA</button>
+            <p class="text-center text-[9px] text-gray-500 mt-6 font-bold uppercase tracking-widest">V14.0 - FINAL VIBE</p>
         </div>
     </div>
 
     <nav class="liquid-nav">
-        <div onclick="showPage('odak')" id="nav-odak" class="nav-item active flex flex-col items-center"><i class="fas fa-stopwatch"></i><span class="text-[9px] font-black mt-1">ODAK</span></div>
-        <div onclick="showPage('komite')" id="nav-komite" class="nav-item flex flex-col items-center"><i class="fas fa-calendar-alt"></i><span class="text-[9px] font-black mt-1">KOMİTE</span></div>
-        <div onclick="showPage('ezber')" id="nav-ezber" class="nav-item flex flex-col items-center"><i class="fas fa-brain"></i><span class="text-[9px] font-black mt-1">EZBER</span></div>
-        <div onclick="showPage('ayarlar')" id="nav-ayarlar" class="nav-item flex flex-col items-center"><i class="fas fa-cog"></i><span class="text-[9px] font-black mt-1">AYARLAR</span></div>
+        <div onclick="showPage('odak')" id="nav-odak" class="nav-item active flex flex-col items-center"><i class="fas fa-stopwatch"></i><span class="text-[9px] font-black mt-1 uppercase">Odak</span></div>
+        <div onclick="showPage('komite')" id="nav-komite" class="nav-item flex flex-col items-center"><i class="fas fa-calendar-alt"></i><span class="text-[9px] font-black mt-1 uppercase">Komite</span></div>
+        <div onclick="showPage('ezber')" id="nav-ezber" class="nav-item flex flex-col items-center"><i class="fas fa-brain"></i><span class="text-[9px] font-black mt-1 uppercase">Ezber</span></div>
+        <div onclick="showPage('ayarlar')" id="nav-ayarlar" class="nav-item flex flex-col items-center"><i class="fas fa-cog"></i><span class="text-[9px] font-black mt-1 uppercase">Ayarlar</span></div>
     </nav>
 
     <script>
-        const quotes = [
-            "Tıp bir sanattır, sen de sanatçısısın Ustam.",
-            "Zorlanıyorsan, gelişiyorsun demektir.",
-            "Bugünün teri, yarının başarısıdır Onur Hocam.",
-            "Sadece hatasızlar değil, vazgeçmeyenler kazanır.",
-            "Anatomi biter, bu hırs bitmez.",
-            "Hayallerin, uykundan daha tatlı olmalı.",
-            "Her kriz bir fırsattır, her komite bir zafer!"
-        ];
-
+        const quotes = ["Tıp bir sanattır, sen de sanatçısısın.", "Zorlanıyorsan, gelişiyorsun demektir.", "Bugünün teri, yarının başarısıdır Hocam.", "Vazgeçmeyenler kazanır.", "Her kurul bir zaferdir!"];
+        
         function showPage(id) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + id).classList.add('active');
@@ -152,7 +143,7 @@
             document.getElementById('headerTitle').innerText = id.toUpperCase();
             if(id === 'komite') {
                 document.getElementById('quoteBox').innerText = quotes[new Date().getDay() % quotes.length];
-                updateCount();
+                renderExams();
             }
             if(id === 'ezber') renderDeck();
             window.scrollTo(0, 0);
@@ -161,60 +152,83 @@
         function setTheme(theme) { document.body.className = theme; localStorage.setItem('selectedTheme', theme); }
         if(localStorage.getItem('selectedTheme')) setTheme(localStorage.getItem('selectedTheme'));
 
+        // ODAK & KRONOMETRE
         let timeLeft = 25 * 60, timerId = null;
         function updateTimer() { let m = Math.floor(timeLeft / 60), s = timeLeft % 60; document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; }
         function startTimer() {
             const btn = document.getElementById('startBtn');
             if (!timerId) {
-                timerId = setInterval(() => { timeLeft--; updateTimer(); if(timeLeft<=0) { clearInterval(timerId); timerId = null; alert("Bitti Hocam!"); } }, 1000);
+                timerId = setInterval(() => { timeLeft--; updateTimer(); if(timeLeft<=0) { clearInterval(timerId); alert("Bitti Hocam!"); } }, 1000);
                 btn.innerText = "DURAKLAT";
             } else { clearInterval(timerId); timerId = null; btn.innerText = "DEVAM ET"; }
         }
-        function resetTimer() { clearInterval(timerId); timerId = null; timeLeft = 25*60; updateTimer(); document.getElementById('startBtn').innerText = "BAŞLAT"; }
+        function resetTimer() { clearInterval(timerId); timerId = null; setCustomTime(); document.getElementById('startBtn').innerText = "BAŞLAT"; }
         function setCustomTime() { timeLeft = document.getElementById('pomoInput').value * 60; updateTimer(); }
 
         let swTime = 0, swId = null;
         function toggleStopwatch() {
             const btn = document.getElementById('swBtn');
             if(!swId) { swId = setInterval(() => { swTime += 10; let d = new Date(swTime); document.getElementById('stopwatch').innerText = d.toISOString().substr(14, 8); }, 10); btn.innerText = "DURDUR"; }
-            else { clearInterval(swId); swId = null; btn.innerText = "DEVAM ET"; }
+            else { clearInterval(swId); swId = null; btn.innerText = "BAŞLAT"; }
         }
         function resetStopwatch() { clearInterval(swId); swId = null; swTime = 0; document.getElementById('stopwatch').innerText = "00:00.00"; document.getElementById('swBtn').innerText = "BAŞLAT"; }
 
-        // KOMİTE TARİHİ DÜZELTME
-        const eInput = document.getElementById('examDate');
-        function updateCount() {
-            if(!eInput.value) return;
-            const target = new Date(eInput.value);
-            target.setHours(0,0,0,0);
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            
-            const diffTime = target.getTime() - today.getTime();
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            const display = document.getElementById('countdown');
-            if(diffDays === 0) display.innerText = "BUGÜN SINAV GÜNÜ!";
-            else if(diffDays > 0) display.innerText = diffDays + " GÜN KALDI";
-            else display.innerText = Math.abs(diffDays) + " GÜN ÖNCEYDİ";
+        // KOMİTE LİSTESİ SİSTEMİ
+        let exams = JSON.parse(localStorage.getItem('exams')) || [];
+        function addExam() {
+            const name = document.getElementById('examName').value;
+            const date = document.getElementById('examDate').value;
+            if(name && date) {
+                exams.push({name, date});
+                exams.sort((a,b) => new Date(a.date) - new Date(date));
+                localStorage.setItem('exams', JSON.stringify(exams));
+                document.getElementById('examName').value = '';
+                document.getElementById('examDate').value = '';
+                renderExams();
+            }
         }
-        if(localStorage.getItem('target')) { eInput.value = localStorage.getItem('target'); updateCount(); }
-        eInput.addEventListener('change', () => { localStorage.setItem('target', eInput.value); updateCount(); });
 
+        function renderExams() {
+            const list = document.getElementById('examList');
+            list.innerHTML = '';
+            const today = new Date(); today.setHours(0,0,0,0);
+            
+            exams.forEach((ex, i) => {
+                const target = new Date(ex.date); target.setHours(0,0,0,0);
+                const diff = Math.ceil((target - today) / 86400000);
+                let text = diff === 0 ? "BUGÜN!" : (diff > 0 ? diff + " GÜN KALDI" : Math.abs(diff) + " GÜN ÖNCEYDİ");
+                
+                list.innerHTML += `
+                    <div class="list-item flex justify-between items-center">
+                        <div>
+                            <p class="text-xs font-bold text-gray-500 uppercase">${ex.date}</p>
+                            <p class="text-sm font-black">${ex.name}</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <p class="text-[10px] font-black ${diff >= 0 ? 'text-blue-400' : 'text-gray-600'}">${text}</p>
+                            <button onclick="deleteExam(${i})" class="text-red-500/30 text-xs"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
+            });
+        }
+        function deleteExam(i) { exams.splice(i, 1); localStorage.setItem('exams', JSON.stringify(exams)); renderExams(); }
+
+        // EZBER SİSTEMİ
         let deck = JSON.parse(localStorage.getItem('deck')) || [];
         function addCard() {
-            const q = document.getElementById('qInput').value, a = document.getElementById('aInput').value, cat = document.getElementById('catInput').value;
-            if(q && a) { deck.push({q, a, cat}); localStorage.setItem('deck', JSON.stringify(deck)); renderDeck(); document.getElementById('qInput').value = ''; document.getElementById('aInput').value = ''; }
+            const q = document.getElementById('qInput').value, a = document.getElementById('aInput').value;
+            if(q && a) { deck.push({q, a}); localStorage.setItem('deck', JSON.stringify(deck)); renderDeck(); document.getElementById('qInput').value = ''; document.getElementById('aInput').value = ''; }
         }
         function renderDeck() {
             const list = document.getElementById('deckList'); list.innerHTML = '';
-            deck.forEach((c, i) => { list.innerHTML += `<div class="card-item flex justify-between items-center"><div><p class="text-[8px] font-bold text-blue-400 uppercase">${c.cat}</p><p class="text-xs font-semibold">${c.q}</p></div><button onclick="deleteCard(${i})" class="text-red-500/50 p-2"><i class="fas fa-trash"></i></button></div>`; });
+            deck.forEach((c, i) => { list.innerHTML += `<div class="list-item flex justify-between items-center"><div><p class="text-xs font-semibold">${c.q}</p></div><button onclick="deleteCard(${i})" class="text-red-500/30 p-2"><i class="fas fa-trash"></i></button></div>`; });
             if(deck.length > 0) document.getElementById('cardDisplay').innerText = deck[deck.length-1].q;
         }
         function flipCard() { if(deck.length === 0) return; const d = document.getElementById('cardDisplay'); d.innerText = d.innerText === deck[deck.length-1].q ? deck[deck.length-1].a : deck[deck.length-1].q; }
         function deleteCard(i) { deck.splice(i, 1); localStorage.setItem('deck', JSON.stringify(deck)); renderDeck(); }
 
-        function clearData() { if(confirm("Sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
+        function clearData() { if(confirm("Tüm veriler temizlensin mi Hocam?")) { localStorage.clear(); location.reload(); } }
+        renderExams();
     </script>
 </body>
 </html>
