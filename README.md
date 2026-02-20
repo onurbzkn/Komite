@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Focus App v13.1</title>
+    <title>Focus App v13.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -77,24 +77,18 @@
                 <button onclick="resetStopwatch()" class="btn-ios flex-[1] bg-zinc-800 py-3 rounded-xl font-bold">SIFIRLA</button>
             </div>
         </div>
-        
-        <div class="glass-card py-4 flex justify-around items-center mt-4">
-            <div class="text-center">
-                <p id="statPomo" class="text-xl font-black text-blue-500 m-0">0</p>
-                <p class="text-[8px] font-bold text-gray-500 uppercase">Seans</p>
-            </div>
-            <div class="w-[1px] h-6 bg-white/10"></div>
-            <div class="text-center">
-                <p id="statCard" class="text-xl font-black text-emerald-500 m-0">0</p>
-                <p class="text-[8px] font-bold text-gray-500 uppercase">Ezber</p>
-            </div>
-        </div>
     </div>
 
     <div id="page-komite" class="page-content max-w-md mx-auto">
         <div class="glass-card">
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4 text-center">Hedef Komite Tarihi</p>
             <input type="date" id="examDate" class="w-full bg-black/20 p-5 rounded-2xl border border-white/10 text-white mb-6 outline-none">
-            <div id="countdown" class="text-5xl font-black text-center py-6">TARİH SEÇİN</div>
+            <div id="countdown" class="text-4xl font-black text-center py-6 leading-tight">TARİH SEÇİN</div>
+        </div>
+
+        <div class="glass-card">
+            <p class="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em] mb-3">Günün Sözü</p>
+            <p id="quoteBox" class="text-lg font-medium italic opacity-80 leading-relaxed">"Bugün çalış, yarın Onur Hocam desinler."</p>
         </div>
     </div>
 
@@ -120,15 +114,15 @@
         <div class="glass-card">
             <p class="font-bold mb-4 text-center uppercase tracking-widest text-[10px] text-gray-400">Uygulama Teması</p>
             <div class="grid grid-cols-2 gap-3">
-                <div onclick="setTheme('theme-blue')" class="theme-swatch bg-[#0f172a] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold border border-white/5">GECE MAVİSİ</div>
+                <div onclick="setTheme('theme-blue')" class="theme-swatch bg-[#0f172a] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold">GECE MAVİSİ</div>
                 <div onclick="setTheme('theme-dark')" class="theme-swatch bg-[#000000] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold border border-white/10">SAF SİYAH</div>
-                <div onclick="setTheme('theme-green')" class="theme-swatch bg-[#064e3b] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold border border-white/5">TIP YEŞİLİ</div>
-                <div onclick="setTheme('theme-purple')" class="theme-swatch bg-[#2e1065] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold border border-white/5">VİBE MOR</div>
+                <div onclick="setTheme('theme-green')" class="theme-swatch bg-[#064e3b] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold">TIP YEŞİLİ</div>
+                <div onclick="setTheme('theme-purple')" class="theme-swatch bg-[#2e1065] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold">VİBE MOR</div>
             </div>
         </div>
         <div class="glass-card">
-            <button onclick="clearData()" class="btn-ios w-full py-4 bg-red-900/10 border border-red-500/30 text-red-500 rounded-2xl font-bold uppercase text-xs">VERİLERİMİ SIFIRLA</button>
-            <p class="text-center text-[9px] text-gray-500 mt-6 font-bold uppercase tracking-widest">V13.1 - PRO ASİSTAN</p>
+            <button onclick="clearData()" class="btn-ios w-full py-4 bg-red-900/10 border border-red-500/30 text-red-500 rounded-2xl font-bold uppercase text-xs tracking-widest">VERİLERİMİ SIFIRLA</button>
+            <p class="text-center text-[9px] text-gray-500 mt-6 font-bold uppercase tracking-widest">V13.2 - FINAL READY</p>
         </div>
     </div>
 
@@ -140,13 +134,26 @@
     </nav>
 
     <script>
-        const ding = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+        const quotes = [
+            "Tıp bir sanattır, sen de sanatçısısın Ustam.",
+            "Zorlanıyorsan, gelişiyorsun demektir.",
+            "Bugünün teri, yarının başarısıdır Onur Hocam.",
+            "Sadece hatasızlar değil, vazgeçmeyenler kazanır.",
+            "Anatomi biter, bu hırs bitmez.",
+            "Hayallerin, uykundan daha tatlı olmalı.",
+            "Her kriz bir fırsattır, her komite bir zafer!"
+        ];
+
         function showPage(id) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + id).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById('nav-' + id).classList.add('active');
-            document.getElementById('headerTitle').innerText = id === 'ayarlar' ? 'AYARLAR' : id.toUpperCase();
+            document.getElementById('headerTitle').innerText = id.toUpperCase();
+            if(id === 'komite') {
+                document.getElementById('quoteBox').innerText = quotes[new Date().getDay() % quotes.length];
+                updateCount();
+            }
             if(id === 'ezber') renderDeck();
             window.scrollTo(0, 0);
         }
@@ -155,20 +162,16 @@
         if(localStorage.getItem('selectedTheme')) setTheme(localStorage.getItem('selectedTheme'));
 
         let timeLeft = 25 * 60, timerId = null;
-        let stats = JSON.parse(localStorage.getItem('stats')) || { pomo: 0, card: 0 };
-        function updateStats() { document.getElementById('statPomo').innerText = stats.pomo; document.getElementById('statCard').innerText = stats.card; localStorage.setItem('stats', JSON.stringify(stats)); }
-        updateStats();
-
-        function setCustomTime() { timeLeft = document.getElementById('pomoInput').value * 60; updateTimer(); }
         function updateTimer() { let m = Math.floor(timeLeft / 60), s = timeLeft % 60; document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; }
         function startTimer() {
             const btn = document.getElementById('startBtn');
             if (!timerId) {
-                timerId = setInterval(() => { timeLeft--; updateTimer(); if(timeLeft<=0) { clearInterval(timerId); timerId = null; ding.play(); stats.pomo++; updateStats(); alert("Bitti Hocam!"); } }, 1000);
+                timerId = setInterval(() => { timeLeft--; updateTimer(); if(timeLeft<=0) { clearInterval(timerId); timerId = null; alert("Bitti Hocam!"); } }, 1000);
                 btn.innerText = "DURAKLAT";
             } else { clearInterval(timerId); timerId = null; btn.innerText = "DEVAM ET"; }
         }
-        function resetTimer() { clearInterval(timerId); timerId = null; setCustomTime(); document.getElementById('startBtn').innerText = "BAŞLAT"; }
+        function resetTimer() { clearInterval(timerId); timerId = null; timeLeft = 25*60; updateTimer(); document.getElementById('startBtn').innerText = "BAŞLAT"; }
+        function setCustomTime() { timeLeft = document.getElementById('pomoInput').value * 60; updateTimer(); }
 
         let swTime = 0, swId = null;
         function toggleStopwatch() {
@@ -178,10 +181,30 @@
         }
         function resetStopwatch() { clearInterval(swId); swId = null; swTime = 0; document.getElementById('stopwatch').innerText = "00:00.00"; document.getElementById('swBtn').innerText = "BAŞLAT"; }
 
+        // KOMİTE TARİHİ DÜZELTME
+        const eInput = document.getElementById('examDate');
+        function updateCount() {
+            if(!eInput.value) return;
+            const target = new Date(eInput.value);
+            target.setHours(0,0,0,0);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            const diffTime = target.getTime() - today.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            const display = document.getElementById('countdown');
+            if(diffDays === 0) display.innerText = "BUGÜN SINAV GÜNÜ!";
+            else if(diffDays > 0) display.innerText = diffDays + " GÜN KALDI";
+            else display.innerText = Math.abs(diffDays) + " GÜN ÖNCEYDİ";
+        }
+        if(localStorage.getItem('target')) { eInput.value = localStorage.getItem('target'); updateCount(); }
+        eInput.addEventListener('change', () => { localStorage.setItem('target', eInput.value); updateCount(); });
+
         let deck = JSON.parse(localStorage.getItem('deck')) || [];
         function addCard() {
             const q = document.getElementById('qInput').value, a = document.getElementById('aInput').value, cat = document.getElementById('catInput').value;
-            if(q && a) { deck.push({q, a, cat}); localStorage.setItem('deck', JSON.stringify(deck)); stats.card++; updateStats(); renderDeck(); document.getElementById('qInput').value = ''; document.getElementById('aInput').value = ''; }
+            if(q && a) { deck.push({q, a, cat}); localStorage.setItem('deck', JSON.stringify(deck)); renderDeck(); document.getElementById('qInput').value = ''; document.getElementById('aInput').value = ''; }
         }
         function renderDeck() {
             const list = document.getElementById('deckList'); list.innerHTML = '';
@@ -190,11 +213,6 @@
         }
         function flipCard() { if(deck.length === 0) return; const d = document.getElementById('cardDisplay'); d.innerText = d.innerText === deck[deck.length-1].q ? deck[deck.length-1].a : deck[deck.length-1].q; }
         function deleteCard(i) { deck.splice(i, 1); localStorage.setItem('deck', JSON.stringify(deck)); renderDeck(); }
-
-        const eInput = document.getElementById('examDate');
-        function updateCount() { if(!eInput.value) return; const diff = new Date(eInput.value).getTime() - new Date().getTime(); document.getElementById('countdown').innerText = diff > 0 ? Math.floor(diff / 86400000) + " GÜN" : "BUGÜN!"; }
-        if(localStorage.getItem('target')) { eInput.value = localStorage.getItem('target'); updateCount(); setInterval(updateCount, 60000); }
-        eInput.addEventListener('change', () => { localStorage.setItem('target', eInput.value); updateCount(); });
 
         function clearData() { if(confirm("Sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
     </script>
