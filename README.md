@@ -2,116 +2,138 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus App v10.4</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Focus App v11</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --bg: #09090b; }
+        :root { --bg: #09090b; --accent: #3b82f6; }
+        
         body { 
             background-color: var(--bg); 
             color: white; 
             font-family: -apple-system, sans-serif; 
             margin: 0; padding: 0;
-            overflow-y: auto !important; /* Kaydırmayı zorla açtık */
-            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto !important; /* Kaydırma artık özgür */
         }
-        
+
+        /* Liquid Glass Nav Bar - Dinamik ve Efektli */
         .liquid-nav {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            width: 85%; max-width: 400px; height: 70px;
-            background: rgba(28, 28, 30, 0.8);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 35px; display: flex; justify-content: space-around; align-items: center;
-            z-index: 9999;
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 85%; max-width: 400px; height: 75px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 38px; display: flex; justify-content: space-around; align-items: center;
+            z-index: 9999; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
+
+        /* Aktif Navigasyon İkonu Efekti */
+        .nav-item { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: #666; cursor: pointer; }
+        .nav-item.active { color: white; transform: translateY(-8px) scale(1.1); }
+        .nav-item i { font-size: 22px; }
+
+        /* Buton Basma Efekti (Active Scale) */
+        .btn-ios { transition: all 0.2s ease; }
+        .btn-ios:active { transform: scale(0.94); filter: brightness(1.1); }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px; padding: 25px; margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 35px; padding: 30px; margin-bottom: 25px;
+            backdrop-filter: blur(10px);
         }
 
-        .btn-ios:active { transform: scale(0.95); }
-        
-        /* Sayfa bölümleri */
-        .page-content { display: none; padding: 100px 20px 150px 20px; }
+        .page-content { display: none; padding: 110px 20px 160px 20px; animation: slideUp 0.4s ease-out; }
         .page-content.active { display: block; }
 
-        .nav-item { color: #666; transition: 0.3s; }
-        .nav-item.active { color: #3b82f6; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div style="position: fixed; top: 0; width: 100%; background: rgba(9,9,11,0.9); backdrop-filter: blur(10px); z-index: 100; padding: 20px 25px;">
-        <h1 id="headerTitle" style="font-size: 24px; font-weight: 900; letter-spacing: -1px; margin: 0;">ODAK</h1>
-        <p style="font-size: 10px; color: #3b82f6; font-weight: bold; margin: 0; letter-spacing: 2px;">MEDİKAL ASİSTAN</p>
+    <div class="fixed top-0 w-full z-[100] bg-[#09090b]/90 backdrop-blur-xl px-6 py-6 border-b border-white/5">
+        <div class="flex justify-between items-center max-w-md mx-auto">
+            <div>
+                <h1 id="headerTitle" class="text-3xl font-black tracking-tighter m-0">ODAK</h1>
+                <p class="text-[10px] text-blue-500 font-bold uppercase tracking-[0.2em] m-0">MEDİKAL ASİSTAN</p>
+            </div>
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center btn-ios shadow-lg shadow-blue-500/20">
+                <i class="fas fa-user-md text-white"></i>
+            </div>
+        </div>
     </div>
 
-    <div id="page-odak" class="page-content active">
+    <div id="page-odak" class="page-content active max-w-md mx-auto">
         <div class="glass-card text-center">
-            <p style="font-size: 11px; color: #888; font-weight: bold; margin-bottom: 10px;">POMODORO</p>
-            <div id="timer" style="font-size: 64px; font-weight: 900; margin-bottom: 20px;">25:00</div>
-            <button onclick="startTimer()" id="startBtn" class="btn-ios" style="width: 100%; background: #2563eb; padding: 15px; border-radius: 18px; font-weight: bold; font-size: 18px; border: none; color: white;">BAŞLAT</button>
-            <button onclick="resetTimer()" style="margin-top: 15px; background: none; border: none; color: #555; font-weight: bold; font-size: 12px;">SIFIRLA</button>
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">POMODORO</p>
+            <div id="timer" class="text-8xl font-black mb-8 tracking-tighter">25:00</div>
+            <button onclick="startTimer()" id="startBtn" class="btn-ios w-full bg-blue-600 py-5 rounded-2xl font-bold text-lg shadow-xl shadow-blue-900/30">BAŞLAT</button>
+            <button onclick="resetTimer()" class="mt-6 text-gray-500 font-bold text-xs uppercase tracking-widest border-none bg-none">SIFIRLA</button>
         </div>
 
         <div class="glass-card text-center">
-            <p style="font-size: 11px; color: #888; font-weight: bold; margin-bottom: 10px;">KRONOMETRE</p>
-            <div id="stopwatch" style="font-size: 40px; font-weight: bold; margin-bottom: 20px; font-family: monospace;">00:00.00</div>
-            <div style="display: flex; gap: 10px;">
-                <button onclick="toggleStopwatch()" id="swBtn" class="btn-ios" style="flex: 2; background: #059669; padding: 15px; border-radius: 18px; font-weight: bold; border: none; color: white;">BAŞLAT</button>
-                <button onclick="resetStopwatch()" class="btn-ios" style="flex: 1; background: #27272a; padding: 15px; border-radius: 18px; font-weight: bold; border: none; color: white;">SIFIRLA</button>
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">KRONOMETRE</p>
+            <div id="stopwatch" class="text-4xl font-mono font-bold mb-6">00:00.00</div>
+            <div class="flex gap-4">
+                <button onclick="toggleStopwatch()" id="swBtn" class="btn-ios flex-[2] bg-emerald-600 py-4 rounded-2xl font-bold shadow-lg shadow-emerald-900/20">BAŞLAT</button>
+                <button onclick="resetStopwatch()" class="btn-ios flex-[1] bg-zinc-800 py-4 rounded-2xl font-bold">SIFIRLA</button>
             </div>
         </div>
     </div>
 
-    <div id="page-komite" class="page-content">
+    <div id="page-komite" class="page-content max-w-md mx-auto">
         <div class="glass-card">
-            <p style="text-align: center; color: #aaa; margin-bottom: 20px; font-size: 14px;">Zamanlayıcı için Komite tarihini giriniz.</p>
-            <input type="date" id="examDate" style="width: 100%; background: #1c1c1e; padding: 18px; border-radius: 15px; border: 1px solid #333; color: white; margin-bottom: 25px; outline: none;">
-            <div id="countdown" style="text-align: center; font-size: 48px; font-weight: 900; background: linear-gradient(to bottom, #fff, #444); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">TARİH SEÇİN</div>
+            <h3 class="text-sm font-bold text-gray-400 mb-6 text-center">Zamanlayıcı için Komite tarihini giriniz.</h3>
+            <input type="date" id="examDate" class="w-full bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 text-white mb-8 outline-none focus:border-blue-500 transition-all">
+            <div id="countdown" class="text-6xl font-black text-center text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500 py-8">TARİH SEÇİN</div>
         </div>
     </div>
 
-    <div id="page-ezber" class="page-content">
-        <div class="glass-card" onclick="flipCard()" style="min-height: 200px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3a8a 0%, #09090b 100%);">
-            <p id="cardDisplay" style="font-size: 20px; font-weight: 500; text-align: center;">Dokun ve Öğren</p>
+    <div id="page-ezber" class="page-content max-w-md mx-auto">
+        <div class="glass-card min-h-[240px] flex items-center justify-center btn-ios bg-gradient-to-br from-blue-900/20 to-transparent mb-8" onclick="flipCard()">
+            <p id="cardDisplay" class="text-2xl font-semibold px-6 text-center leading-tight">Dokun ve Öğren</p>
         </div>
-        <div class="glass-card">
-            <input id="qInput" placeholder="Soru..." style="width: 100%; background: #1c1c1e; padding: 15px; border-radius: 12px; border: none; color: white; margin-bottom: 10px; outline: none;">
-            <input id="aInput" placeholder="Cevap..." style="width: 100%; background: #1c1c1e; padding: 15px; border-radius: 12px; border: none; color: white; margin-bottom: 15px; outline: none;">
-            <button onclick="addCard()" style="width: 100%; background: #2563eb; padding: 15px; border-radius: 15px; font-weight: bold; border: none; color: white;">KARTI KAYDET</button>
+        <div class="glass-card space-y-4">
+            <input id="qInput" placeholder="Soru..." class="w-full bg-zinc-900 p-5 rounded-2xl outline-none border border-zinc-800">
+            <input id="aInput" placeholder="Cevap..." class="w-full bg-zinc-900 p-5 rounded-2xl outline-none border border-zinc-800">
+            <button onclick="addCard()" class="btn-ios w-full bg-blue-600 py-5 rounded-2xl font-bold uppercase tracking-widest">KARTI KAYDET</button>
         </div>
     </div>
 
-    <div id="page-ayarlar" class="page-content">
+    <div id="page-ayarlar" class="page-content max-w-md mx-auto">
         <div class="glass-card">
-            <p style="font-weight: bold; margin-bottom: 15px;">Uygulama Teması</p>
-            <div style="display: flex; gap: 10px;">
-                <div style="flex: 1; height: 50px; background: #1e3a8a; border-radius: 12px; border: 2px solid #3b82f6;"></div>
-                <div style="flex: 1; height: 50px; background: #000; border-radius: 12px; border: 1px solid #333;"></div>
+            <p class="font-bold mb-6">Uygulama Teması</p>
+            <div class="flex gap-4">
+                <div class="flex-1 h-14 bg-blue-600/20 rounded-2xl border-2 border-blue-500"></div>
+                <div class="flex-1 h-14 bg-black rounded-2xl border border-zinc-800"></div>
             </div>
         </div>
         <div class="glass-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <span style="font-weight: bold;">Karanlık Mod</span>
-                <div style="width: 50px; height: 26px; background: #2563eb; border-radius: 15px; position: relative;">
-                    <div style="position: absolute; right: 3px; top: 3px; width: 20px; height: 20px; background: white; border-radius: 50%;"></div>
-                </div>
+            <div class="flex justify-between items-center py-4 border-b border-white/5 mb-8">
+                <span class="font-bold">Karanlık Mod</span>
+                <div class="w-12 h-6 bg-blue-600 rounded-full flex items-center px-1"><div class="w-4 h-4 bg-white rounded-full ml-auto shadow-md"></div></div>
             </div>
-            <button onclick="clearData()" style="width: 100%; padding: 18px; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 18px; color: #ef4444; font-weight: bold;">VERİLERİMİ SIFIRLA</button>
-            <p style="text-align: center; font-size: 10px; color: #444; margin-top: 20px;">V10.4 - USTAM EDITION</p>
+            <button onclick="clearData()" class="btn-ios w-full py-5 bg-red-900/10 border border-red-500/30 text-red-500 rounded-2xl font-bold">VERİLERİMİ SIFIRLA</button>
+            <p class="text-center text-[10px] text-gray-600 mt-8 font-bold">V11.0 - USTAM EDITION</p>
         </div>
     </div>
 
     <nav class="liquid-nav">
-        <div onclick="showPage('odak')" id="nav-odak" class="nav-item active text-center"><i class="fas fa-clock"></i><div style="font-size: 8px; font-weight: bold;">ODAK</div></div>
-        <div onclick="showPage('komite')" id="nav-komite" class="nav-item text-center"><i class="fas fa-calendar"></i><div style="font-size: 8px; font-weight: bold;">KOMİTE</div></div>
-        <div onclick="showPage('ezber')" id="nav-ezber" class="nav-item text-center"><i class="fas fa-brain"></i><div style="font-size: 8px; font-weight: bold;">EZBER</div></div>
-        <div onclick="showPage('ayarlar')" id="nav-ayarlar" class="nav-item text-center"><i class="fas fa-cog"></i><div style="font-size: 8px; font-weight: bold;">AYARLAR</div></div>
+        <div onclick="showPage('odak')" id="nav-odak" class="nav-item active flex flex-col items-center">
+            <i class="fas fa-stopwatch"></i><span class="text-[9px] font-black mt-1">ODAK</span>
+        </div>
+        <div onclick="showPage('komite')" id="nav-komite" class="nav-item flex flex-col items-center">
+            <i class="fas fa-calendar-alt"></i><span class="text-[9px] font-black mt-1">KOMİTE</span>
+        </div>
+        <div onclick="showPage('ezber')" id="nav-ezber" class="nav-item flex flex-col items-center">
+            <i class="fas fa-brain"></i><span class="text-[9px] font-black mt-1">EZBER</span>
+        </div>
+        <div onclick="showPage('ayarlar')" id="nav-ayarlar" class="nav-item flex flex-col items-center">
+            <i class="fas fa-sliders-h"></i><span class="text-[9px] font-black mt-1">AYARLAR</span>
+        </div>
     </nav>
 
     <script>
@@ -134,13 +156,13 @@
             const btn = document.getElementById('startBtn');
             if (!timerId) {
                 timerId = setInterval(() => { timeLeft--; updateTimer(); if(timeLeft<=0) clearInterval(timerId); }, 1000);
-                btn.innerText = "DURAKLAT"; btn.style.background = "#3f3f46";
+                btn.innerText = "DURAKLAT"; btn.classList.replace('bg-blue-600', 'bg-zinc-800');
             } else {
                 clearInterval(timerId); timerId = null;
-                btn.innerText = "DEVAM ET"; btn.style.background = "#2563eb";
+                btn.innerText = "DEVAM ET"; btn.classList.replace('bg-zinc-800', 'bg-blue-600');
             }
         }
-        function resetTimer() { clearInterval(timerId); timerId = null; timeLeft = 25 * 60; updateTimer(); document.getElementById('startBtn').innerText = "BAŞLAT"; document.getElementById('startBtn').style.background = "#2563eb"; }
+        function resetTimer() { clearInterval(timerId); timerId = null; timeLeft = 25 * 60; updateTimer(); document.getElementById('startBtn').innerText = "BAŞLAT"; document.getElementById('startBtn').classList.add('bg-blue-600'); }
 
         // Kronometre
         let swTime = 0, swId = null;
@@ -172,7 +194,6 @@
             const d = new Date(eInput.value).getTime() - new Date().getTime();
             if(d > 0) document.getElementById('countdown').innerText = Math.floor(d/86400000) + " GÜN";
         }
-
         function clearData() { if(confirm("Sıfırlansın mı Hocam?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
