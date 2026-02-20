@@ -1,0 +1,2 @@
+# Komite
+Tıp Fakültesi 
