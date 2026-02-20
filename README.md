@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Focus App v14</title>
+    <title>Focus App v15</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -15,8 +15,15 @@
 
         body { 
             background-color: var(--bg); color: white; transition: all 0.5s ease;
-            font-family: -apple-system, sans-serif; margin: 0; overflow-x: hidden;
+            font-family: -apple-system, system-ui, sans-serif; margin: 0; overflow-x: hidden;
             overflow-y: auto !important; min-height: 100vh;
+        }
+
+        /* Apple Style Date Input Reset */
+        input[type="date"] {
+            appearance: none; -webkit-appearance: none;
+            background: rgba(255,255,255,0.05); color-scheme: dark;
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 12px;
         }
 
         .liquid-nav {
@@ -41,6 +48,10 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .list-item { background: rgba(255,255,255,0.02); border-radius: 20px; padding: 18px; margin-top: 10px; border-left: 4px solid var(--accent); }
+        
+        /* Profile Image Styles */
+        #profile-pic-container { position: relative; width: 44px; height: 44px; cursor: pointer; }
+        #profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
     </style>
 </head>
 <body class="theme-blue">
@@ -51,8 +62,9 @@
                 <h1 id="headerTitle" class="text-3xl font-black tracking-tighter m-0 uppercase">ODAK</h1>
                 <p class="text-[10px] text-blue-500 font-bold uppercase tracking-[0.2em] m-0">MEDİKAL ASİSTAN</p>
             </div>
-            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center btn-ios">
-                <i class="fas fa-user-md text-white"></i>
+            <div id="profile-pic-container" class="btn-ios" onclick="document.getElementById('profile-upload').click()">
+                <img id="profile-img" src="https://img.icons8.com/ios-filled/100/ffffff/stethoscope.png" alt="Profile">
+                <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="uploadProfilePic(event)">
             </div>
         </div>
     </div>
@@ -81,18 +93,14 @@
     <div id="page-komite" class="page-content max-w-md mx-auto">
         <div class="glass-card">
             <p class="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-4 text-center">YILLIK KOMİTE PLANI</p>
-            <div class="space-y-3">
-                <input id="examName" placeholder="Komite Adı (Örn: Anatomi)" class="w-full bg-black/20 p-4 rounded-xl outline-none border border-white/10 text-sm">
-                <input type="date" id="examDate" class="w-full bg-black/20 p-4 rounded-xl border border-white/10 text-white outline-none text-sm">
+            <div class="space-y-4">
+                <input id="examName" placeholder="Komite Adı..." class="w-full bg-black/20 p-4 rounded-xl outline-none border border-white/10 text-sm">
+                <input type="date" id="examDate" class="w-full text-white text-center text-sm outline-none">
                 <button onclick="addExam()" class="btn-ios w-full bg-blue-600 py-4 rounded-xl font-bold uppercase text-xs">PLANA EKLE</button>
             </div>
         </div>
-
-        <div id="examList" class="space-y-3 mb-8">
-            </div>
-
+        <div id="examList" class="space-y-3 mb-8"></div>
         <div class="glass-card">
-            <p class="text-[10px] font-bold text-blue-400 uppercase tracking-[0.2em] mb-3 text-center">MOTİVASYON</p>
             <p id="quoteBox" class="text-md font-medium italic opacity-80 text-center leading-relaxed">"Bugün çalış, yarın Onur Hocam desinler."</p>
         </div>
     </div>
@@ -119,9 +127,9 @@
                 <div onclick="setTheme('theme-purple')" class="theme-swatch bg-[#2e1065] h-12 flex items-center justify-center rounded-xl text-[9px] font-bold">VİBE MOR</div>
             </div>
         </div>
-        <div class="glass-card">
+        <div class="glass-card text-center">
             <button onclick="clearData()" class="btn-ios w-full py-4 bg-red-900/10 border border-red-500/30 text-red-500 rounded-2xl font-bold uppercase text-xs">VERİLERİMİ SIFIRLA</button>
-            <p class="text-center text-[9px] text-gray-500 mt-6 font-bold uppercase tracking-widest">V14.0 - FINAL VIBE</p>
+            <p class="text-[9px] text-gray-500 mt-6 font-bold uppercase tracking-widest">V15.0 - iOS ELITE</p>
         </div>
     </div>
 
@@ -133,7 +141,25 @@
     </nav>
 
     <script>
-        const quotes = ["Tıp bir sanattır, sen de sanatçısısın.", "Zorlanıyorsan, gelişiyorsun demektir.", "Bugünün teri, yarının başarısıdır Hocam.", "Vazgeçmeyenler kazanır.", "Her kurul bir zaferdir!"];
+        // Profil Resmi Yükleme Mantığı
+        function uploadProfilePic(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Img = e.target.result;
+                    document.getElementById('profile-img').src = base64Img;
+                    localStorage.setItem('userProfilePic', base64Img);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        // Sayfa yüklendiğinde resmi kontrol et
+        if(localStorage.getItem('userProfilePic')) {
+            document.getElementById('profile-img').src = localStorage.getItem('userProfilePic');
+        }
+
+        const quotes = ["Tıp bir sanattır.", "Zorlanıyorsan, gelişiyorsun.", "Bugünün teri, yarının başarısı.", "Vazgeçmeyenler kazanır."];
         
         function showPage(id) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
@@ -141,10 +167,7 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById('nav-' + id).classList.add('active');
             document.getElementById('headerTitle').innerText = id.toUpperCase();
-            if(id === 'komite') {
-                document.getElementById('quoteBox').innerText = quotes[new Date().getDay() % quotes.length];
-                renderExams();
-            }
+            if(id === 'komite') renderExams();
             if(id === 'ezber') renderDeck();
             window.scrollTo(0, 0);
         }
@@ -152,19 +175,20 @@
         function setTheme(theme) { document.body.className = theme; localStorage.setItem('selectedTheme', theme); }
         if(localStorage.getItem('selectedTheme')) setTheme(localStorage.getItem('selectedTheme'));
 
-        // ODAK & KRONOMETRE
+        // Pomodoro
         let timeLeft = 25 * 60, timerId = null;
         function updateTimer() { let m = Math.floor(timeLeft / 60), s = timeLeft % 60; document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; }
         function startTimer() {
             const btn = document.getElementById('startBtn');
             if (!timerId) {
-                timerId = setInterval(() => { timeLeft--; updateTimer(); if(timeLeft<=0) { clearInterval(timerId); alert("Bitti Hocam!"); } }, 1000);
+                timerId = setInterval(() => { timeLeft--; updateTimer(); if(timeLeft<=0) { clearInterval(timerId); alert("Bitti!"); } }, 1000);
                 btn.innerText = "DURAKLAT";
             } else { clearInterval(timerId); timerId = null; btn.innerText = "DEVAM ET"; }
         }
         function resetTimer() { clearInterval(timerId); timerId = null; setCustomTime(); document.getElementById('startBtn').innerText = "BAŞLAT"; }
         function setCustomTime() { timeLeft = document.getElementById('pomoInput').value * 60; updateTimer(); }
 
+        // Kronometre
         let swTime = 0, swId = null;
         function toggleStopwatch() {
             const btn = document.getElementById('swBtn');
@@ -173,51 +197,30 @@
         }
         function resetStopwatch() { clearInterval(swId); swId = null; swTime = 0; document.getElementById('stopwatch').innerText = "00:00.00"; document.getElementById('swBtn').innerText = "BAŞLAT"; }
 
-        // KOMİTE LİSTESİ SİSTEMİ
+        // Komite İşlemleri
         let exams = JSON.parse(localStorage.getItem('exams')) || [];
         function addExam() {
             const name = document.getElementById('examName').value;
             const date = document.getElementById('examDate').value;
-            if(name && date) {
-                exams.push({name, date});
-                exams.sort((a,b) => new Date(a.date) - new Date(date));
-                localStorage.setItem('exams', JSON.stringify(exams));
-                document.getElementById('examName').value = '';
-                document.getElementById('examDate').value = '';
-                renderExams();
-            }
+            if(name && date) { exams.push({name, date}); exams.sort((a,b) => new Date(a.date) - new Date(b.date)); localStorage.setItem('exams', JSON.stringify(exams)); renderExams(); }
         }
-
         function renderExams() {
-            const list = document.getElementById('examList');
-            list.innerHTML = '';
+            const list = document.getElementById('examList'); list.innerHTML = '';
             const today = new Date(); today.setHours(0,0,0,0);
-            
             exams.forEach((ex, i) => {
                 const target = new Date(ex.date); target.setHours(0,0,0,0);
                 const diff = Math.ceil((target - today) / 86400000);
-                let text = diff === 0 ? "BUGÜN!" : (diff > 0 ? diff + " GÜN KALDI" : Math.abs(diff) + " GÜN ÖNCEYDİ");
-                
-                list.innerHTML += `
-                    <div class="list-item flex justify-between items-center">
-                        <div>
-                            <p class="text-xs font-bold text-gray-500 uppercase">${ex.date}</p>
-                            <p class="text-sm font-black">${ex.name}</p>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <p class="text-[10px] font-black ${diff >= 0 ? 'text-blue-400' : 'text-gray-600'}">${text}</p>
-                            <button onclick="deleteExam(${i})" class="text-red-500/30 text-xs"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>`;
+                let text = diff === 0 ? "BUGÜN!" : (diff > 0 ? diff + " GÜN" : Math.abs(diff) + " GÜN ÖNCE");
+                list.innerHTML += `<div class="list-item flex justify-between items-center"><div><p class="text-xs font-bold text-gray-500 uppercase">${ex.date}</p><p class="text-sm font-black">${ex.name}</p></div><div class="flex items-center gap-4"><p class="text-[10px] font-black ${diff >= 0 ? 'text-blue-400' : 'text-gray-600'}">${text}</p><button onclick="deleteExam(${i})" class="text-red-500/30 text-xs"><i class="fas fa-trash"></i></button></div></div>`;
             });
         }
         function deleteExam(i) { exams.splice(i, 1); localStorage.setItem('exams', JSON.stringify(exams)); renderExams(); }
 
-        // EZBER SİSTEMİ
+        // Ezber Kartları
         let deck = JSON.parse(localStorage.getItem('deck')) || [];
         function addCard() {
             const q = document.getElementById('qInput').value, a = document.getElementById('aInput').value;
-            if(q && a) { deck.push({q, a}); localStorage.setItem('deck', JSON.stringify(deck)); renderDeck(); document.getElementById('qInput').value = ''; document.getElementById('aInput').value = ''; }
+            if(q && a) { deck.push({q, a}); localStorage.setItem('deck', JSON.stringify(deck)); renderDeck(); }
         }
         function renderDeck() {
             const list = document.getElementById('deckList'); list.innerHTML = '';
@@ -227,8 +230,7 @@
         function flipCard() { if(deck.length === 0) return; const d = document.getElementById('cardDisplay'); d.innerText = d.innerText === deck[deck.length-1].q ? deck[deck.length-1].a : deck[deck.length-1].q; }
         function deleteCard(i) { deck.splice(i, 1); localStorage.setItem('deck', JSON.stringify(deck)); renderDeck(); }
 
-        function clearData() { if(confirm("Tüm veriler temizlensin mi Hocam?")) { localStorage.clear(); location.reload(); } }
-        renderExams();
+        function clearData() { if(confirm("Sıfırlansın mı?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
 </html>
