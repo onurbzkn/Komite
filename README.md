@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Focus App v12.1</title>
+    <title>Focus App v13</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -33,15 +33,15 @@
 
         .glass-card {
             background: var(--card); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 35px; padding: 30px; margin-bottom: 25px; backdrop-filter: blur(10px);
+            border-radius: 35px; padding: 25px; margin-bottom: 20px; backdrop-filter: blur(10px);
         }
 
         .page-content { display: none; padding: 110px 20px 160px 20px; animation: slideUp 0.4s ease-out; }
         .page-content.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .theme-swatch { width: 100%; height: 60px; border-radius: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; font-bold; border: 2px solid transparent; }
-        .theme-swatch.active { border-color: white; }
+        /* Yeni Liste Elemanları */
+        .card-item { background: rgba(255,255,255,0.02); border-radius: 15px; padding: 15px; margin-top: 10px; border-left: 4px solid var(--accent); }
     </style>
 </head>
 <body class="theme-blue">
@@ -62,42 +62,56 @@
         <div class="glass-card text-center">
             <div class="flex justify-center items-center gap-2 mb-4">
                 <input type="number" id="pomoInput" value="25" class="bg-white/10 w-16 text-center rounded-lg font-bold outline-none border border-white/10">
-                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Dakika Pomodoro</span>
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Dakika</span>
             </div>
             <div id="timer" class="text-8xl font-black mb-8 tracking-tighter">25:00</div>
-            <div class="flex flex-col gap-3">
-                <button onclick="startTimer()" id="startBtn" class="btn-ios w-full bg-blue-600 py-5 rounded-2xl font-bold text-lg">BAŞLAT</button>
+            <button onclick="startTimer()" id="startBtn" class="btn-ios w-full bg-blue-600 py-5 rounded-2xl font-bold text-lg mb-4">BAŞLAT</button>
+            <div class="flex justify-between px-2">
                 <button onclick="setCustomTime()" class="text-[10px] font-bold text-blue-400 uppercase">Süreyi Uygula</button>
-                <button onclick="resetTimer()" class="mt-2 text-gray-500 font-bold text-xs uppercase">SIFIRLA</button>
+                <button onclick="resetTimer()" class="text-[10px] text-gray-500 font-bold uppercase">Sıfırla</button>
             </div>
         </div>
-        <div class="glass-card text-center">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4">KRONOMETRE</p>
-            <div id="stopwatch" class="text-4xl font-mono font-bold mb-6">00:00.00</div>
-            <div class="flex gap-4">
-                <button onclick="toggleStopwatch()" id="swBtn" class="btn-ios flex-[2] bg-emerald-600 py-4 rounded-2xl font-bold">BAŞLAT</button>
-                <button onclick="resetStopwatch()" class="btn-ios flex-[1] bg-zinc-800 py-4 rounded-2xl font-bold">SIFIRLA</button>
+        
+        <div class="glass-card py-6 flex justify-around items-center">
+            <div class="text-center">
+                <p id="statPomo" class="text-2xl font-black text-blue-500 m-0">0</p>
+                <p class="text-[9px] font-bold text-gray-500">SEANS</p>
+            </div>
+            <div class="w-[1px] h-8 bg-white/10"></div>
+            <div class="text-center">
+                <p id="statCard" class="text-2xl font-black text-emerald-500 m-0">0</p>
+                <p class="text-[9px] font-bold text-gray-500">EZBER</p>
             </div>
         </div>
     </div>
 
     <div id="page-komite" class="page-content max-w-md mx-auto">
         <div class="glass-card">
-            <h3 class="text-sm font-bold text-gray-400 mb-6 text-center uppercase tracking-widest">Komite tarihini giriniz.</h3>
-            <input type="date" id="examDate" class="w-full bg-black/20 p-5 rounded-2xl border border-white/10 text-white mb-8 outline-none">
-            <div id="countdown" class="text-6xl font-black text-center py-8 text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500">TARİH SEÇİN</div>
+            <input type="date" id="examDate" class="w-full bg-black/20 p-5 rounded-2xl border border-white/10 text-white mb-6 outline-none">
+            <div id="countdown" class="text-5xl font-black text-center py-6 text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500">TARİH SEÇİN</div>
         </div>
     </div>
 
     <div id="page-ezber" class="page-content max-w-md mx-auto">
-        <div class="glass-card min-h-[240px] flex items-center justify-center btn-ios bg-gradient-to-br from-white/5 to-transparent mb-8 shadow-2xl" onclick="flipCard()">
-            <p id="cardDisplay" class="text-2xl font-semibold px-6 text-center leading-tight">Dokun ve Öğren</p>
+        <div class="glass-card min-h-[200px] flex items-center justify-center btn-ios bg-gradient-to-br from-white/5 to-transparent mb-6" onclick="flipCard()">
+            <p id="cardDisplay" class="text-xl font-semibold px-6 text-center">Önce Kart Ekleyin</p>
         </div>
+        
         <div class="glass-card space-y-4">
-            <input id="qInput" placeholder="Soru..." class="w-full bg-black/20 p-5 rounded-2xl outline-none border border-white/10">
-            <input id="aInput" placeholder="Cevap..." class="w-full bg-black/20 p-5 rounded-2xl outline-none border border-white/10">
-            <button onclick="addCard()" class="btn-ios w-full bg-blue-600 py-5 rounded-2xl font-bold uppercase tracking-widest">KARTI KAYDET</button>
+            <select id="catInput" class="w-full bg-black/20 p-4 rounded-xl border border-white/10 text-white outline-none">
+                <option value="Genel">Genel</option>
+                <option value="Anatomi">Anatomi</option>
+                <option value="Fizyoloji">Fizyoloji</option>
+                <option value="Biyokimya">Biyokimya</option>
+            </select>
+            <input id="qInput" placeholder="Soru..." class="w-full bg-black/20 p-4 rounded-xl outline-none border border-white/10">
+            <input id="aInput" placeholder="Cevap..." class="w-full bg-black/20 p-4 rounded-xl outline-none border border-white/10">
+            <button onclick="addCard()" class="btn-ios w-full bg-blue-600 py-4 rounded-xl font-bold uppercase tracking-widest">KARTI KAYDET</button>
         </div>
+
+        <p class="text-[10px] font-black text-gray-500 mb-4 px-2 uppercase tracking-widest">EZBER DESTE LİSTESİ</p>
+        <div id="deckList" class="space-y-3 pb-20">
+            </div>
     </div>
 
     <div id="page-ayarlar" class="page-content max-w-md mx-auto">
@@ -111,8 +125,8 @@
             </div>
         </div>
         <div class="glass-card">
-            <button onclick="clearData()" class="btn-ios w-full py-5 bg-red-900/10 border border-red-500/30 text-red-500 rounded-2xl font-bold uppercase text-xs tracking-widest">VERİLERİMİ SIFIRLA</button>
-            <p class="text-center text-[10px] text-gray-500 mt-8 font-bold">V12.1 - PLAY STORE HAZIR</p>
+            <button onclick="clearData()" class="btn-ios w-full py-5 bg-red-900/10 border border-red-500/30 text-red-500 rounded-2xl font-bold uppercase text-xs">VERİLERİMİ SIFIRLA</button>
+            <p class="text-center text-[10px] text-gray-500 mt-8 font-bold">V13.0 - PRO ASİSTAN</p>
         </div>
     </div>
 
@@ -124,30 +138,112 @@
     </nav>
 
     <script>
+        // Ses Efekti (Bittiğinde çalar)
+        const ding = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+
         function showPage(id) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + id).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById('nav-' + id).classList.add('active');
             document.getElementById('headerTitle').innerText = id === 'ayarlar' ? 'AYARLAR' : id.toUpperCase();
+            if(id === 'ezber') renderDeck();
             window.scrollTo(0, 0);
         }
 
         function setTheme(theme) { document.body.className = theme; localStorage.setItem('selectedTheme', theme); }
         if(localStorage.getItem('selectedTheme')) setTheme(localStorage.getItem('selectedTheme'));
 
+        // ODAK & İSTATİSTİK
         let timeLeft = 25 * 60, timerId = null;
+        let stats = JSON.parse(localStorage.getItem('stats')) || { pomo: 0, card: 0 };
+        
+        function updateStats() {
+            document.getElementById('statPomo').innerText = stats.pomo;
+            document.getElementById('statCard').innerText = stats.card;
+            localStorage.setItem('stats', JSON.stringify(stats));
+        }
+        updateStats();
+
         function setCustomTime() { timeLeft = document.getElementById('pomoInput').value * 60; updateTimer(); }
         function updateTimer() { let m = Math.floor(timeLeft / 60), s = timeLeft % 60; document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; }
+        
         function startTimer() {
             const btn = document.getElementById('startBtn');
             if (!timerId) {
-                timerId = setInterval(() => { timeLeft--; updateTimer(); if(timeLeft<=0) { clearInterval(timerId); alert("Bitti Hocam!"); } }, 1000);
+                timerId = setInterval(() => { 
+                    timeLeft--; updateTimer(); 
+                    if(timeLeft<=0) { 
+                        clearInterval(timerId); timerId = null;
+                        ding.play(); stats.pomo++; updateStats();
+                        alert("Odaklanma bitti Hocam, harikasın!"); 
+                    } 
+                }, 1000);
                 btn.innerText = "DURAKLAT"; btn.style.opacity = "0.6";
             } else { clearInterval(timerId); timerId = null; btn.innerText = "DEVAM ET"; btn.style.opacity = "1"; }
         }
         function resetTimer() { clearInterval(timerId); timerId = null; setCustomTime(); document.getElementById('startBtn').innerText = "BAŞLAT"; }
 
+        // EZBER DESTE SİSTEMİ
+        let deck = JSON.parse(localStorage.getItem('deck')) || [];
+        let currentCardIndex = 0, isFront = true;
+
+        function addCard() {
+            const q = document.getElementById('qInput').value;
+            const a = document.getElementById('aInput').value;
+            const cat = document.getElementById('catInput').value;
+            if(q && a) {
+                deck.push({q, a, cat, id: Date.now()});
+                localStorage.setItem('deck', JSON.stringify(deck));
+                stats.card++; updateStats();
+                document.getElementById('qInput').value = ''; document.getElementById('aInput').value = '';
+                renderDeck();
+                alert("Kart desteye eklendi Ustam.");
+            }
+        }
+
+        function renderDeck() {
+            const list = document.getElementById('deckList');
+            list.innerHTML = '';
+            deck.forEach((c, index) => {
+                list.innerHTML += `
+                    <div class="card-item flex justify-between items-center">
+                        <div>
+                            <p class="text-[8px] font-bold text-blue-400 uppercase">${c.cat}</p>
+                            <p class="text-sm font-semibold">${c.q}</p>
+                        </div>
+                        <button onclick="deleteCard(${index})" class="text-red-500/50 p-2"><i class="fas fa-trash"></i></button>
+                    </div>`;
+            });
+            if(deck.length > 0) {
+                currentCardIndex = deck.length - 1;
+                isFront = true;
+                showCurrentCard();
+            }
+        }
+
+        function showCurrentCard() {
+            if(deck.length > 0) {
+                const c = deck[currentCardIndex];
+                document.getElementById('cardDisplay').innerText = isFront ? c.q : c.a;
+            }
+        }
+
+        function flipCard() {
+            if(deck.length === 0) return;
+            isFront = !isFront;
+            showCurrentCard();
+        }
+
+        function deleteCard(index) {
+            if(confirm("Bu kartı siliyorum Hocam?")) {
+                deck.splice(index, 1);
+                localStorage.setItem('deck', JSON.stringify(deck));
+                renderDeck();
+            }
+        }
+
+        // KRONOMETRE & KOMİTE
         let swTime = 0, swId = null;
         function toggleStopwatch() {
             const btn = document.getElementById('swBtn');
@@ -156,32 +252,17 @@
         }
         function resetStopwatch() { clearInterval(swId); swId = null; swTime = 0; document.getElementById('stopwatch').innerText = "00:00.00"; document.getElementById('swBtn').innerText = "BAŞLAT"; }
 
-        let card = JSON.parse(localStorage.getItem('card')) || {q: "Dokun ve Öğren", a: "Cevap Burada!"};
-        let isFront = true;
-        function flipCard() { isFront = !isFront; document.getElementById('cardDisplay').innerText = isFront ? card.q : card.a; }
-        function addCard() {
-            const q = document.getElementById('qInput').value, a = document.getElementById('aInput').value;
-            if(q && a) { card = {q, a}; localStorage.setItem('card', JSON.stringify(card)); isFront = true; flipCard(); }
-        }
-
         const eInput = document.getElementById('examDate');
-        const countdownDisplay = document.getElementById('countdown');
-        
         function updateCount() {
             if(!eInput.value) return;
-            const target = new Date(eInput.value).getTime();
-            const now = new Date().getTime();
-            const diff = target - now;
-            if(diff > 0) {
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                countdownDisplay.innerText = days + " GÜN KALDI";
-            } else { countdownDisplay.innerText = "SINAV GÜNÜ!"; }
+            const diff = new Date(eInput.value).getTime() - new Date().getTime();
+            document.getElementById('countdown').innerText = diff > 0 ? Math.floor(diff / 86400000) + " GÜN KALDI" : "SINAV GÜNÜ!";
         }
-
         if(localStorage.getItem('target')) { eInput.value = localStorage.getItem('target'); updateCount(); setInterval(updateCount, 1000); }
-        eInput.addEventListener('change', () => { localStorage.setItem('target', eInput.value); updateCount(); setInterval(updateCount, 1000); });
+        eInput.addEventListener('change', () => { localStorage.setItem('target', eInput.value); updateCount(); });
 
         function clearData() { if(confirm("Tüm verileriniz silinecek Hocam?")) { localStorage.clear(); location.reload(); } }
+        renderDeck();
     </script>
 </body>
 </html>
